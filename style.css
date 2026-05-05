@@ -810,9 +810,29 @@
     .session-section,
     .contact-section { grid-template-columns: 1fr; gap: 48px; }
     .steps-grid { grid-template-columns: 1fr 1fr; }
-    .benefits-grid { grid-template-columns: 1fr 1fr; }
-    .offers-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
-    .offers-section { padding: 80px 32px; }
+
+    /* Benefits: nur die 3 besten zeigen auf Mobile */
+    .benefit-card:nth-child(n+4) { display: none; }
+    .benefits-grid { grid-template-columns: 1fr; }
+
+    /* Angebote: nebeneinander als horizontaler Scroll */
+    .offers-section { padding: 80px 0 80px 24px; }
+    .offers-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 16px;
+      padding-right: 24px;
+      padding-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .offers-grid::-webkit-scrollbar { display: none; }
+    .offer-card {
+      flex: 0 0 min(300px, 78vw);
+      scroll-snap-align: start;
+    }
+
     .contact-card { padding: 32px 24px; }
     .session-right-note { padding: 32px 28px; }
     footer { flex-direction: column; gap: 12px; text-align: center; }
@@ -821,19 +841,34 @@
   @media (max-width: 600px) {
     .hero-left { padding: 60px 24px; }
     .steps-grid,
-    .benefits-grid,
-    .offers-grid { grid-template-columns: 1fr; }
-    .rhythm-viz { flex-direction: column; gap: 24px; }
-    .rhythm-divider { display: none; }
+    .benefits-grid { grid-template-columns: 1fr; }
+
+    /* Atemrhythmus: HORIZONTAL bleiben, nur kompakter */
+    .rhythm-viz { flex-direction: row; gap: 0; overflow-x: auto; }
+    .rhythm-block { min-width: 88px; padding: 0 4px; }
+    .rhythm-count { font-size: 24px; }
+    .rhythm-label { font-size: 10px; }
+    .rhythm-word { font-size: 9px; letter-spacing: 0.08em; }
+    .rhythm-divider { height: 30px; flex-shrink: 0; }
+
+    /* Allgemeine Padding-Reduktion */
     .how-section { padding: 80px 24px; }
     .rhythm-section { padding: 80px 24px; }
     .benefits-section { padding: 80px 24px; }
     .quote-section { padding: 80px 24px; }
     .contact-section { padding: 80px 24px; }
     .ueber-section { padding: 80px 24px; }
-    .offers-section { padding: 80px 24px; }
+    .offers-section { padding: 80px 0 80px 24px; }
     footer { padding: 32px 24px; }
-    .ueber-img-badge { right: 0; bottom: -16px; }
+
+    /* Über mich: Bild-Badge innerhalb des Rahmens, kein Überlaufen */
+    .ueber-img-badge {
+      bottom: 16px;
+      right: 16px;
+      position: absolute;
+    }
+    .ueber-img-frame { aspect-ratio: 4/3; }
+    .ueber-img-wrap { padding-bottom: 0; }
   }
 
   /* ── FOREST STRIP ── */
@@ -1140,6 +1175,14 @@
     .navbar-hamburger { display: flex; }
     .navbar-links { display: none; }
 
+    /* iOS Safari: backdrop-filter auf fixed parent verhindert fixed-children.
+       Entfernen wenn Menü offen → position:fixed der ul wirkt wieder korrekt. */
+    .navbar.menu-open {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: rgba(36, 68, 44, 0.98);
+    }
+
     /* Mobile menu drawer */
     .navbar.menu-open .navbar-links {
       display: flex;
@@ -1149,21 +1192,30 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(36, 68, 44, 0.97);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 32px 24px;
-      gap: 4px;
+      background: rgba(36, 68, 44, 0.98);
+      padding: 24px 20px 48px;
+      gap: 2px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       z-index: 999;
     }
+    .navbar.menu-open .navbar-links li {
+      width: 100%;
+    }
     .navbar.menu-open .navbar-links a {
+      display: block;
+      width: 100%;
       font-size: 18px;
       padding: 16px 20px;
-      color: rgba(255,255,255,0.9);
+      color: rgba(255,255,255,0.88);
       border-radius: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
     }
-    .navbar.menu-open .navbar-links a:hover {
+    .navbar.menu-open .navbar-links li:last-child a {
+      border-bottom: none;
+    }
+    .navbar.menu-open .navbar-links a:hover,
+    .navbar.menu-open .navbar-links a:active {
       background: rgba(255,255,255,0.1);
       color: #fff;
     }
