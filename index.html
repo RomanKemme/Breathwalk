@@ -111,6 +111,9 @@
     <img src="images/breathwalk_logo.png" alt="Breathwalk Logo" class="navbar-logo">
     <a href="#" class="navbar-brand">Breathwalk<span class="navbar-tagline">Gehen. Atmen. Leben.</span></a>
   </div>
+  <button class="navbar-hamburger" aria-label="Menü öffnen" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
   <ul class="navbar-links">
     <li><a href="#was-ist">Was ist Breathwalk</a></li>
     <li><a href="#wie">Wie es funktioniert</a></li>
@@ -586,5 +589,21 @@
   <p style="margin-top: 8px; font-size: 11px; color: rgba(255,255,255,0.3);">© 2025 Breathwalk – Carola Bambas | Breathwalk-Lehrerin, Schauspielerin & Theaterpädagogin</p>
 </footer>
 
+<script>
+  const hamburger = document.querySelector('.navbar-hamburger');
+  const navbar = document.querySelector('.navbar');
+  hamburger.addEventListener('click', function() {
+    const open = navbar.classList.toggle('menu-open');
+    this.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  document.querySelectorAll('.navbar-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navbar.classList.remove('menu-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+</script>
 </body>
 </html>
